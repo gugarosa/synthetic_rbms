@@ -22,9 +22,45 @@ def get_arguments():
     parser.add_argument(
         'input', help='Input file for the extracted features', type=str)
 
+    # Adds an identifier argument to the desired number of training epochs
+    parser.add_argument(
+        'epochs', help='Number of training epochs', type=int)
+
     # Adds an identifier argument to the desired output model file
     parser.add_argument(
         'output', help='Output file for saved model', type=str)
+
+    # Adds an identifier argument to the desired noise dimension
+    parser.add_argument(
+        '-noise', help='Noise dimension', type=int, default=100)
+
+    # Adds an identifier argument to the desired number of samplings
+    parser.add_argument(
+        '-sampling', help='Number of samplings', type=int, default=3)
+
+    # Adds an identifier argument to the desired ReLU activation threshold
+    parser.add_argument(
+        '-alpha', help='ReLU activation threshold', type=float, default=0.01)
+
+    # Adds an identifier argument to the desired Discriminator's learning rate
+    parser.add_argument(
+        '-d_lr', help='Discriminator learning rate', type=float, default=0.0001)
+
+    # Adds an identifier argument to the desired Generator's learning rate
+    parser.add_argument(
+        '-g_lr', help='Generator learning rate', type=float, default=0.0001)
+
+    # Adds an identifier argument to the desired batch size
+    parser.add_argument(
+        '-batch_size', help='Batch size', type=int, default=128)
+
+    # Adds an identifier argument to whether normalization should be used or not
+    parser.add_argument(
+        '-norm', help='Dataset normalization', type=bool, default=False)
+
+    # Adds an identifier argument to whether shuffling should be used or not
+    parser.add_argument(
+        '-shuffle', help='Dataset shuffling', type=bool, default=False)
 
     return parser.parse_args()
 
@@ -35,25 +71,34 @@ if __name__ == '__main__':
 
     # Gathering variables from arguments
     input_file = args.input
+    epochs = args.epochs
     output_file = args.output
+    noise_dim = args.noise
+    n_samplings = args.sampling
+    alpha = args.alpha
+    d_lr = args.d_lr
+    g_lr = args.g_lr
+    batch_size = args.batch_size
+    norm = args.norm
+    shuffle = args.shuffle
 
     # Loading extracted features
     x = np.load(input_file)
 
     # Creating an Image Dataset
-    dataset = ImageDataset(x, batch_size=128, shape=(
-        x.shape[0], x.shape[1]), normalize=False)
+    dataset = ImageDataset(x, batch_size=batch_size, shape=(x.shape[0], x.shape[1]),
+                           normalize=norm, shuffle=shuffle)
 
     # Creating the GAN
-    gan = GAN(input_shape=(x.shape[1],),
-              noise_dim=100, n_samplings=3, alpha=0.01)
+    gan = GAN(input_shape=(x.shape[1],), noise_dim=noise_dim,
+              n_samplings=n_samplings, alpha=alpha)
 
     # Compiling the GAN
-    gan.compile(d_optimizer=tf.optimizers.Adam(learning_rate=0.0001),
-                g_optimizer=tf.optimizers.Adam(learning_rate=0.0001))
+    gan.compile(d_optimizer=tf.optimizers.Adam(learning_rate=d_lr),
+                g_optimizer=tf.optimizers.Adam(learning_rate=g_lr))
 
     # Fitting the GAN
-    gan.fit(dataset.batches, epochs=10)
+    gan.fit(dataset.batches, epochs=epochs)
 
     # Saving GAN weights
     gan.save_weights(output_file, save_format='tf')

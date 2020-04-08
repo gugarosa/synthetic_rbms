@@ -1,7 +1,3 @@
-# Saved outputs
-**/*.npy
-models/*
-
 # Downloaded data
 data/*
 

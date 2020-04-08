@@ -2,8 +2,8 @@ import argparse
 
 import torch
 
-import loader as l
-import utils as u
+import utils.loader as l
+import utils.saver as s
 
 
 def get_arguments():
@@ -50,4 +50,4 @@ if __name__ == '__main__':
     train_probs, _ = model.forward(train)
 
     # Outputting extracted features to a numpy file
-    u.save_as_numpy(train_probs, output_file=output_file)
+    s.save_torch_as_numpy(train_probs, output_file=output_file)

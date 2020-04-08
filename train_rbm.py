@@ -3,7 +3,7 @@ import argparse
 import torch
 from learnergy.models.rbm import RBM
 
-import loader as l
+import utils.loader as l
 
 
 def get_arguments():

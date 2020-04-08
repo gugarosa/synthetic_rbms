@@ -1,8 +1,9 @@
 import argparse
 
-import matplotlib.pyplot as plt
 import tensorflow as tf
 from nalp.models.gan import GAN
+
+import utils.saver as s
 
 
 def get_arguments():
@@ -21,6 +22,30 @@ def get_arguments():
     parser.add_argument(
         'input', help='Input file for the pre-trained GAN', type=str)
 
+    # Adds an identifier argument to the desired output file name
+    parser.add_argument(
+        'output', help='Output file for sampled features', type=str)
+
+    # Adds an identifier argument to the desired size of generated samples
+    parser.add_argument(
+        '-size', help='Amount of generated samples', type=int, default=16)
+
+    # Adds an identifier argument to the desired number of features
+    parser.add_argument(
+        '-n_features', help='Amount of features of pre-trained GAN', type=int, default=256)
+
+    # Adds an identifier argument to the desired noise dimension
+    parser.add_argument(
+        '-noise', help='Noise dimension', type=int, default=100)
+
+    # Adds an identifier argument to the desired number of samplings
+    parser.add_argument(
+        '-sampling', help='Number of samplings', type=int, default=3)
+
+    # Adds an identifier argument to the desired ReLU activation threshold
+    parser.add_argument(
+        '-alpha', help='ReLU activation threshold', type=float, default=0.01)
+
     return parser.parse_args()
 
 
@@ -30,32 +55,25 @@ if __name__ == '__main__':
 
     # Gathering variables from arguments
     input_file = args.input
+    output_file = args.output
+    size = args.size
+    n_features = args.n_features
+    noise_dim = args.noise
+    n_samplings = args.sampling
+    alpha = args.alpha
 
     # Creating the GAN
-    gan = GAN(input_shape=(256,), noise_dim=100, n_samplings=3, alpha=0.01)
+    gan = GAN(input_shape=(n_features,), noise_dim=noise_dim,
+              n_samplings=n_samplings, alpha=alpha)
 
     # Loading pre-trained GAN weights
     gan.load_weights(input_file).expect_partial()
 
     # Creating a noise tensor for further sampling
-    z = tf.random.normal([16, 1, 1, 100])
+    z = tf.random.normal([16, 1, 1, noise_dim])
 
-    # Sampling an artificial image
-    sampled_images = tf.reshape(gan.G(z), (16, 16, 16))
+    # Sampling from GAN
+    sampled_z = gan.G(z)
 
-    # Creating a pyplot figure
-    fig = plt.figure(figsize=(4,4))
-
-    # For every possible generated image
-    for i in range(sampled_images.shape[0]):
-        # Defines the subplot
-        plt.subplot(4, 4, i+1)
-
-        # Plots the image to the figure
-        plt.imshow(sampled_images[i, :, :] * 127.5 + 127.5, cmap='gray')
-
-        # Disabling the axis
-        plt.axis('off')
-
-    # Showing the plot
-    plt.show()
+    # Outputting sampled features to a numpy file
+    s.save_tf_as_numpy(sampled_z, output_file=output_file)
