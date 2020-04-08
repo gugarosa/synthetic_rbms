@@ -34,7 +34,7 @@ def get_arguments():
 
     # Adds an identifier argument to the desired number of hidden units
     parser.add_argument(
-        '-n_hidden', help='Number of hidden units', type=int, default=128)
+        '-n_hidden', help='Number of hidden units', type=int, default=256)
 
     # Adds an identifier argument to the desired number of CD steps
     parser.add_argument(

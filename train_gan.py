@@ -16,7 +16,7 @@ def get_arguments():
 
     # Creates the ArgumentParser
     parser = argparse.ArgumentParser(
-        usage='Trains a GAN using RBM-based features.')
+        usage='Trains a GAN using RBM-extracted feature vectors.')
 
     # Adds an identifier argument to the desired extracted features
     parser.add_argument(
