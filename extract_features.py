@@ -1,7 +1,6 @@
 import argparse
 
 import torch
-from learnergy.models.rbm import RBM
 
 import loader as l
 import utils as u
@@ -22,48 +21,12 @@ def get_arguments():
     parser.add_argument('dataset', help='Dataset identifier', choices=[
                         'mnist', 'fmnist', 'kmnist'])
 
-    # Adds an identifier argument to the desired number of training epochs
-    parser.add_argument('epochs', help='Number of training epochs', type=int)
+    # Adds an identifier argument to the desired pre-trained model path
+    parser.add_argument('model', help='Input file for the pre-trained model', type=str)
 
     # Adds an identifier argument to the desired output file name
     parser.add_argument(
         'output', help='Output file for extracted features', type=str)
-
-    # Adds an identifier argument to the desired number of visible units
-    parser.add_argument(
-        '-n_visible', help='Number of visible units', type=int, default=784)
-
-    # Adds an identifier argument to the desired number of hidden units
-    parser.add_argument(
-        '-n_hidden', help='Number of hidden units', type=int, default=128)
-
-    # Adds an identifier argument to the desired number of CD steps
-    parser.add_argument(
-        '-steps', help='Number of CD steps', type=int, default=1)
-
-    # Adds an identifier argument to the desired learning rate
-    parser.add_argument(
-        '-lr', help='Learning rate', type=float, default=0.1)
-
-    # Adds an identifier argument to the desired momentum
-    parser.add_argument(
-        '-momentum', help='Momentum', type=float, default=0)
-
-    # Adds an identifier argument to the desired weight decay
-    parser.add_argument(
-        '-decay', help='Weight decay', type=float, default=0)
-
-    # Adds an identifier argument to the desired temperature
-    parser.add_argument(
-        '-temp', help='Temperature', type=float, default=1)
-
-    # Adds an identifier argument to whether GPU should be used or not
-    parser.add_argument(
-        '-gpu', help='GPU usage', type=bool, default=True)
-
-    # Adds an identifier argument to the desired batch size
-    parser.add_argument(
-        '-batch_size', help='Batch size', type=int, default=128)
 
     return parser.parse_args()
 
@@ -74,27 +37,14 @@ if __name__ == '__main__':
 
     # Gathering variables from arguments
     dataset = args.dataset
-    epochs = args.epochs
+    input_model = args.model
     output_file = args.output
-    n_visible = args.n_visible
-    n_hidden = args.n_hidden
-    steps = args.steps
-    lr = args.lr
-    momentum = args.momentum
-    decay = args.decay
-    T = args.temp
-    gpu = args.gpu
-    batch_size = args.batch_size
 
     # Loads the training data
     train, _ = l.load_dataset(name=dataset)
 
-    # Creates an RBM
-    model = RBM(n_visible=n_visible, n_hidden=n_hidden, steps=steps, learning_rate=lr,
-                momentum=momentum, decay=decay, temperature=T, use_gpu=gpu)
-
-    # Fits an RBM
-    mse, pl = model.fit(train, batch_size=batch_size, epochs=epochs)
+    # Loads the pre-trained model
+    model = torch.load(input_model)
 
     # Performs a forward pass over the training data, i.e., feature extraction
     train_probs, _ = model.forward(train)

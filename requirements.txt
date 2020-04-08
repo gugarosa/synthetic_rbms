@@ -1,2 +1,2 @@
-learnergy>=1.0.3
+learnergy>=1.0.4
 nalp>=2.0.0
