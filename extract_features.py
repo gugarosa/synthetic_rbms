@@ -22,7 +22,7 @@ def get_arguments():
                         'mnist', 'fmnist', 'kmnist'])
 
     # Adds an identifier argument to the desired pre-trained model path
-    parser.add_argument('model', help='Input file for the pre-trained model', type=str)
+    parser.add_argument('input', help='Input file for the pre-trained model', type=str)
 
     # Adds an identifier argument to the desired output file name
     parser.add_argument(
@@ -37,14 +37,14 @@ if __name__ == '__main__':
 
     # Gathering variables from arguments
     dataset = args.dataset
-    input_model = args.model
+    input_file = args.input
     output_file = args.output
 
     # Loads the training data
     train, _ = l.load_dataset(name=dataset)
 
     # Loads the pre-trained model
-    model = torch.load(input_model)
+    model = torch.load(input_file)
 
     # Performs a forward pass over the training data, i.e., feature extraction
     train_probs, _ = model.forward(train)

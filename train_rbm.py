@@ -24,7 +24,7 @@ def get_arguments():
     # Adds an identifier argument to the desired number of training epochs
     parser.add_argument('epochs', help='Number of training epochs', type=int)
 
-    # Adds an identifier argument to the desired output file name
+    # Adds an identifier argument to the desired output model file
     parser.add_argument(
         'output', help='Output file for saved model', type=str)
 
