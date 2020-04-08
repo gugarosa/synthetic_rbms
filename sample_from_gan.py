@@ -16,7 +16,7 @@ def get_arguments():
 
     # Creates the ArgumentParser
     parser = argparse.ArgumentParser(
-        usage='Samples new feature vectors from a pre-trained GAN')
+        usage='Samples new weights vectors from a pre-trained GAN')
 
     # Adds an identifier argument to the desired pre-trained model path
     parser.add_argument(
@@ -24,11 +24,11 @@ def get_arguments():
 
     # Adds an identifier argument to the desired output file name
     parser.add_argument(
-        'output', help='Output file for sampled features', type=str)
+        'output', help='Output file for sampled weights', type=str)
 
     # Adds an identifier argument to the desired size of generated samples
     parser.add_argument(
-        '-size', help='Amount of generated samples', type=int, default=16)
+        '-size', help='Amount of generated samples', type=int, default=784)
 
     # Adds an identifier argument to the desired number of features
     parser.add_argument(
@@ -70,10 +70,10 @@ if __name__ == '__main__':
     gan.load_weights(input_file).expect_partial()
 
     # Creating a noise tensor for further sampling
-    z = tf.random.normal([16, 1, 1, noise_dim])
+    z = tf.random.normal([size, 1, 1, noise_dim])
 
     # Sampling from GAN
     sampled_z = gan.G(z)
 
-    # Outputting sampled features to a numpy file
+    # Outputting sampled weights to a numpy file
     s.save_tf_as_numpy(sampled_z, output_file=output_file)

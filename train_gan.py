@@ -16,11 +16,11 @@ def get_arguments():
 
     # Creates the ArgumentParser
     parser = argparse.ArgumentParser(
-        usage='Trains a GAN using RBM-extracted feature vectors.')
+        usage='Trains a GAN using RBM-extracted weight vectors.')
 
-    # Adds an identifier argument to the desired extracted features
+    # Adds an identifier argument to the desired extracted weights
     parser.add_argument(
-        'input', help='Input file for the extracted features', type=str)
+        'input', help='Input file for the extracted weights', type=str)
 
     # Adds an identifier argument to the desired number of training epochs
     parser.add_argument(

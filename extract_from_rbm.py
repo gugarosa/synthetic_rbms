@@ -15,7 +15,7 @@ def get_arguments():
     """
 
     # Creates the ArgumentParser
-    parser = argparse.ArgumentParser(usage='Extracts RBM-based feature vectors.')
+    parser = argparse.ArgumentParser(usage='Extracts RBM-based weight vectors.')
 
     # Adds a dataset argument with pre-defined choices
     parser.add_argument('dataset', help='Dataset identifier', choices=[
@@ -26,7 +26,7 @@ def get_arguments():
 
     # Adds an identifier argument to the desired output file name
     parser.add_argument(
-        'output', help='Output file for extracted features', type=str)
+        'output', help='Output file for extracted weights', type=str)
 
     return parser.parse_args()
 
@@ -46,8 +46,5 @@ if __name__ == '__main__':
     # Loads the pre-trained model
     model = torch.load(input_file)
 
-    # Performs a forward pass over the training data, i.e., feature extraction
-    train_probs, _ = model.forward(train)
-
-    # Outputting extracted features to a numpy file
-    s.save_torch_as_numpy(train_probs, output_file=output_file)
+    # Outputting extracted weights to a numpy file
+    s.save_torch_as_numpy(model.W, output_file=output_file)
