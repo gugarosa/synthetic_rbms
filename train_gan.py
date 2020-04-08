@@ -82,7 +82,7 @@ if __name__ == '__main__':
     norm = args.norm
     shuffle = args.shuffle
 
-    # Loading extracted features
+    # Loading extracted weights
     x = np.load(input_file)
 
     # Creating an Image Dataset
