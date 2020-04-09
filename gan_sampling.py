@@ -69,4 +69,4 @@ if __name__ == '__main__':
     sampled_z = gan.G(z)
 
     # Outputting sampled weights to a numpy file
-    s.save_tf_as_numpy(sampled_z, output_file=output_weight)
+    s.save_tf_as_numpy(sampled_z, output_file=f'weights/{output_weight}')

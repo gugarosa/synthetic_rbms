@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import torch
 
-import utils.loader as l
+import utils.stream as s
 
 
 def get_arguments():
@@ -27,7 +27,7 @@ def get_arguments():
 
     # Adds an identifier argument to the desired weights file
     parser.add_argument(
-        'input_weight', help='Input name for the weights', type=str)
+        'input_weight', help='Input name for the weight file', type=str)
 
     return parser.parse_args()
 
@@ -42,16 +42,20 @@ if __name__ == '__main__':
     input_weight = args.input_weight
 
     # Loads the testing data
-    _, test = l.load_dataset(name=dataset)
+    _, test = s.load_dataset(name=dataset)
 
     # Loads the pre-trained model
-    model = torch.load(input_model)
+    model = torch.load(f'models/{input_model}.pth')
 
     # Loading sampled weights
-    W = np.load(input_weight)
+    W = np.load(f'weights/{input_weight}.npy')
 
     # Reshaping weights to correct dimension
     W = np.reshape(W, [model.n_visible, model.n_hidden])
+
+    # Resetting biases for fair comparison
+    model.a = torch.nn.Parameter(torch.zeros(model.n_visible))
+    model.b = torch.nn.Parameter(torch.zeros(model.n_hidden))
 
     # Applying loaded weights as new weights
     model.W = torch.nn.Parameter(torch.from_numpy(W))

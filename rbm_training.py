@@ -65,8 +65,8 @@ if __name__ == '__main__':
 
     # Gathering variables from arguments
     dataset = args.dataset
-    output_model = args.model
-    output_weight = args.weight
+    output_model = args.output_model
+    output_weight = args.output_weight
     n_visible = args.n_visible
     n_hidden = args.n_hidden
     steps = args.steps
