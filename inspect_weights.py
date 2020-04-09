@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-rbm_weights = np.load('weights/out.npy')
-sampled_weights = np.load('weights/sampled.npy')
+rbm_weights = np.load('weights/vanilla_rbm_0.npy')
+sampled_weights = np.load('weights/vanilla_gan.npy')
 
 print(f'Euclidean distance: {np.linalg.norm(rbm_weights[0] - sampled_weights[0])}')
 
