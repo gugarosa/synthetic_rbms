@@ -1,2 +1,2 @@
-learnergy>=1.0.4
-nalp>=2.0.0
+git+https://github.com/gugarosa/learnergy
+git+https://github.com/gugarosa/nalp
