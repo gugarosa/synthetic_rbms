@@ -60,5 +60,10 @@ if __name__ == '__main__':
     # Applying loaded weights as new weights
     model.W = torch.nn.Parameter(torch.from_numpy(W))
 
+    # Checking model device type
+    if model.device == 'cuda':
+        # Applying its parameters as cuda again
+        model = model.cuda()
+
     # Fits an RBM
     mse, pl = model.reconstruct(test)
