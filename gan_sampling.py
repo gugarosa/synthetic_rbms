@@ -1,8 +1,9 @@
 import argparse
 
 import tensorflow as tf
-import utils.stream as s
 from nalp.models.gan import GAN
+
+import utils.stream as s
 
 
 def get_arguments():

@@ -1,7 +1,6 @@
 import argparse
 
 import numpy as np
-
 import tensorflow as tf
 from nalp.datasets.image import ImageDataset
 from nalp.models.gan import GAN

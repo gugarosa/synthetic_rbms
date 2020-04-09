@@ -1,9 +1,8 @@
 import argparse
 
+import learnergy.visual.image as im
 import matplotlib.pyplot as plt
 import numpy as np
-
-import learnergy.visual.image as im
 import torch
 
 
