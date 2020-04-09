@@ -75,4 +75,4 @@ As an optional procedure, one can also inspect the sampled weights and calculate
 
 ```python weights_inspection.py -h```
 
-*Note that this script uses matplotlib as an additional package.*
+*Note that this script uses learnergy to create the mosaics.*

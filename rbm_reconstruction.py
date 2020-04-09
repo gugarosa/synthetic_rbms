@@ -1,8 +1,8 @@
 import argparse
 
 import numpy as np
-import torch
 
+import torch
 import utils.stream as s
 
 

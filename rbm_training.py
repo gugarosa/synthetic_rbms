@@ -1,9 +1,8 @@
 import argparse
 
 import torch
-from learnergy.models.rbm import RBM
-
 import utils.stream as s
+from learnergy.models.rbm import RBM
 
 
 def get_arguments():
