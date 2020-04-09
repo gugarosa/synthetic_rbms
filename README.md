@@ -11,19 +11,10 @@ If you use our work to fulfill any of your needs, please cite us:
 
 ## Structure
 
-  * `data/`
-    * `RSDataset`: Folder containing the RSDataset data;
-    * `RSSCN7`: Folder containing the RSSCN7 data;
-    * `UCMerced_LandUse`: Folder containing the UCMerced_LandUse data;
-  * `models/`
-    * `ensemble.py`: Ensemble-based methods, such as weight-based and majority voting;
+  * `models/`: Folder for saving the output models, such as `.pth` and `tensorflow` ones;
   * `utils/`
-    * `constants.py`: Constants definitions;
-    * `dictionary.py`: Creates a dictionary of classes and labels;
-    * `load.py`: Loads the dataset according to desired format;
-    * `metrics.py`: Provides several metrics calculations;
-    * `mh.py`: Wraps the meta-heuristic classes;
-    * `wrapper.py`: Wraps the optimization tasks;
+    * `stream.py`: Common loading and saving methods;
+  * `weights/`: Folder for saving the output weights, which will use `.npy` extensions.
 
 ## How-to-Use
 
@@ -56,7 +47,7 @@ Our first script helps you in pre-training an RBM and saving its weights. With t
 
 ### GANs Pre-Training
 
-After pre-training RBMs and saving their weights, we can now proceed to training a GAN with the saved weights as its input. Just run the following script and invoke their helper:
+After pre-training RBMs and saving their weights, we can now proceed in training a GAN with the saved weights as its input. Just run the following script and invoke its helper:
 
 ```python gan_training.py -h```
 
