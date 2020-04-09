@@ -1,6 +1,35 @@
 import numpy as np
 import tensorflow as tf
+import torchvision as tv
 
+# A constant used to hold a dictionary of possible datasets
+DATASETS = {
+    'mnist': tv.datasets.MNIST,
+    'fmnist': tv.datasets.FashionMNIST,
+    'kmnist': tv.datasets.KMNIST
+}
+
+
+def load_dataset(name='mnist'):
+    """Loads an input dataset.
+
+    Args:
+        name (str): Name of dataset to be loaded.
+
+    Returns:
+        Training and testing sets of loaded dataset.
+
+    """
+
+    # Loads the training data
+    train = DATASETS[name](root='./data', train=True, download=True,
+                           transform=tv.transforms.ToTensor())
+
+    # Loads the testing data
+    test = DATASETS[name](root='./data', train=False, download=True,
+                          transform=tv.transforms.ToTensor())
+
+    return train, test
 
 def save_torch_as_numpy(t, output_file=''):
     """Saves a PyTorch tensor into a Numpy array.

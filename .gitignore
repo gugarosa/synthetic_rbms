@@ -3,6 +3,7 @@ data/*
 
 # Libraries logs
 *.log
+*.log*
 
 # MacOS temporary files
 **/*.DS_Store

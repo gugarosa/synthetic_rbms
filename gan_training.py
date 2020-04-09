@@ -16,51 +16,43 @@ def get_arguments():
 
     # Creates the ArgumentParser
     parser = argparse.ArgumentParser(
-        usage='Trains a GAN using RBM-extracted weight vectors.')
+        usage='Trains a GAN using RBMs weights.')
 
-    # Adds an identifier argument to the desired extracted weights
     parser.add_argument(
-        'input', help='Input file for the extracted weights', type=str)
+        'runs', help='Number of RBMs used for weights extraction', type=int)
 
-    # Adds an identifier argument to the desired number of training epochs
     parser.add_argument(
-        'epochs', help='Number of training epochs', type=int)
+        'input_weight', help='Input name for the extracted weights without folder, index and extension', type=str)
 
-    # Adds an identifier argument to the desired output model file
     parser.add_argument(
-        'output', help='Output file for saved model', type=str)
+        'output_model', help='Output name for saved model', type=str)
 
-    # Adds an identifier argument to the desired noise dimension
     parser.add_argument(
-        '-noise', help='Noise dimension', type=int, default=100)
+        '-batch_size', help='Batch size', type=int, default=4)
 
-    # Adds an identifier argument to the desired number of samplings
-    parser.add_argument(
-        '-sampling', help='Number of samplings', type=int, default=3)
-
-    # Adds an identifier argument to the desired ReLU activation threshold
-    parser.add_argument(
-        '-alpha', help='ReLU activation threshold', type=float, default=0.01)
-
-    # Adds an identifier argument to the desired Discriminator's learning rate
-    parser.add_argument(
-        '-d_lr', help='Discriminator learning rate', type=float, default=0.0001)
-
-    # Adds an identifier argument to the desired Generator's learning rate
-    parser.add_argument(
-        '-g_lr', help='Generator learning rate', type=float, default=0.0001)
-
-    # Adds an identifier argument to the desired batch size
-    parser.add_argument(
-        '-batch_size', help='Batch size', type=int, default=128)
-
-    # Adds an identifier argument to whether normalization should be used or not
     parser.add_argument(
         '-norm', help='Dataset normalization', type=bool, default=False)
 
-    # Adds an identifier argument to whether shuffling should be used or not
     parser.add_argument(
         '-shuffle', help='Dataset shuffling', type=bool, default=False)
+
+    parser.add_argument(
+        '-noise', help='Noise dimension', type=int, default=100)
+
+    parser.add_argument(
+        '-sampling', help='Number of samplings', type=int, default=3)
+
+    parser.add_argument(
+        '-alpha', help='ReLU activation threshold', type=float, default=0.01)
+
+    parser.add_argument(
+        '-d_lr', help='Discriminator learning rate', type=float, default=0.0001)
+
+    parser.add_argument(
+        '-g_lr', help='Generator learning rate', type=float, default=0.0001)
+
+    parser.add_argument(
+        '-epochs', help='Number of training epochs', type=int, default=100)
 
     return parser.parse_args()
 
@@ -70,20 +62,34 @@ if __name__ == '__main__':
     args = get_arguments()
 
     # Gathering variables from arguments
-    input_file = args.input
-    epochs = args.epochs
-    output_file = args.output
+    runs = args.runs
+    input_weight = args.input_weight
+    output_model = args.output_model
+    batch_size = args.batch_size
+    norm = args.norm
+    shuffle = args.shuffle
     noise_dim = args.noise
     n_samplings = args.sampling
     alpha = args.alpha
     d_lr = args.d_lr
     g_lr = args.g_lr
-    batch_size = args.batch_size
-    norm = args.norm
-    shuffle = args.shuffle
+    epochs = args.epochs
+    
+    # Creating an empty array for holding input data
+    x = np.zeros([1, 0])
 
-    # Loading extracted weights
-    x = np.load(input_file)
+    for i in range(runs):
+        # Loading RBM weights
+        W = np.load(f'weights/{input_weight}_{i}.npy')
+
+        # Flatenning weights
+        W = np.reshape(W, [1, -1])
+
+        # Concatenating to input array
+        x = np.hstack([x, W])
+
+    # Reshaping input back to (n_runs, n_features)
+    x = np.reshape(x, [runs, -1])
 
     # Creating an Image Dataset
     dataset = ImageDataset(x, batch_size=batch_size, shape=(x.shape[0], x.shape[1]),
@@ -101,4 +107,4 @@ if __name__ == '__main__':
     gan.fit(dataset.batches, epochs=epochs)
 
     # Saving GAN weights
-    gan.save_weights(output_file, save_format='tf')
+    gan.save_weights(f'models/{output_model}', save_format='tf')
