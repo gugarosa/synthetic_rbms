@@ -1,27 +1,52 @@
+import argparse
+
+import learnergy.visual.image as im
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 
-rbm_weights = np.load('weights/vanilla_rbm_0.npy')
-sampled_weights = np.load('weights/vanilla_gan.npy')
 
-print(f'Euclidean distance: {np.linalg.norm(rbm_weights[0] - sampled_weights[0])}')
+def get_arguments():
+    """Gets arguments from the command line.
 
-# Creating a pyplot figure
-fig = plt.figure(figsize=(1,2))
+    Returns:
+        A parser with the input arguments.
 
-# Defines the subplot
-plt.subplot(1, 2, 1)
-plt.imshow(np.reshape(rbm_weights[0], (16, 16)) * 127.5 + 127.5, cmap='gray')
+    """
 
-# Disabling the axis
-plt.axis('off')
+    # Creates the ArgumentParser
+    parser = argparse.ArgumentParser(usage='Inspects both original and sampled weights and constructs a mosaic.')
 
-# Defines the subplot
-plt.subplot(1, 2, 2)
-plt.imshow(np.reshape(sampled_weights[0], (16, 16)) * 127.5 + 127.5, cmap='gray')
+    parser.add_argument(
+        'original_weight', help='Input name for the original RBM weights', type=str)
 
-# Disabling the axis
-plt.axis('off')
+    parser.add_argument(
+        'sampled_weight', help='Input name for the sampled weights', type=str)
 
-# Showing the plot
-plt.show()
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    # Gathers the input arguments
+    args = get_arguments()
+
+    # Gathering variables from arguments
+    original_weight = args.original_weight
+    sampled_weight = args.sampled_weight
+
+    # Loading original weights
+    weights = np.load(f'weights/{original_weight}.npy')
+
+    # Loading sampled weights
+    sampled_weights = np.load(f'weights/{sampled_weight}.npy')
+
+    # Reshaping sampled weights to original weights size
+    sampled_weights = np.reshape(sampled_weights, [weights.shape[0], weights.shape[1]])
+
+    # Converting both arrays to tensor
+    weights = torch.from_numpy(weights)
+    sampled_weights = torch.from_numpy(sampled_weights)
+
+    # Creating mosaics
+    im.create_mosaic(weights)
+    im.create_mosaic(sampled_weights)

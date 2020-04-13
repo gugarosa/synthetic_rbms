@@ -25,7 +25,7 @@ There are 5+1 simple steps in order to accomplish the same experiments described
  * Pre-train GANs with RBMs-saved weights as the input data;
  * Samples new weights from a pre-trained GAN;
  * Reconstruct pre-trained RBMs with original and sampled weights;
- * (Optional) Inspect the distance between original and sampled weights.
+ * (Optional) Inspect the mosaic between original and sampled weights.
 
 Additionally, you can perform the whole experimentation step with the provided shell script, as follows:
 
@@ -71,8 +71,8 @@ Finally, with the new sampled weights, it is now possible to reconstruct the ori
 
 ### (Optional) Weights Inspection
 
-As an optional procedure, one can also inspect the sampled weights and calculate its euclidean distance regarding the original weights. Please use the following script in order to accomplish such an approach:
+As an optional procedure, one can also inspect mosaics from the sampled weights and the original weights. Please use the following script in order to accomplish such an approach:
 
 ```python weights_inspection.py -h```
 
-*Note that this script uses matplotlib as an additional package.*
+*Note that this script uses learnergy to create the mosaics.*

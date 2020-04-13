@@ -16,7 +16,7 @@ def get_arguments():
 
     # Creates the ArgumentParser
     parser = argparse.ArgumentParser(
-        usage='Samples new weights from a pre-trained GAN')
+        usage='Samples new weights from a pre-trained GAN.')
 
     parser.add_argument(
         'input_model', help='Input name for the pre-trained GAN', type=str)
