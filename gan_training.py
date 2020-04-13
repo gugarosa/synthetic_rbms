@@ -1,9 +1,12 @@
 import argparse
+import os
 
 import numpy as np
 import tensorflow as tf
 from nalp.datasets.image import ImageDataset
 from nalp.models.gan import GAN
+
+os.environ['TF_DETERMINISTIC_OPS'] = '1'
 
 
 def get_arguments():
@@ -78,7 +81,7 @@ if __name__ == '__main__':
     g_lr = args.g_lr
     epochs = args.epochs
     seed = args.seed
-    	
+
     # Setting Tensorflow and Numpy random seeds
     tf.random.set_seed(seed)
     np.random.seed(seed)

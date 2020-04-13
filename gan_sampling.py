@@ -1,9 +1,12 @@
 import argparse
+import os
 
 import tensorflow as tf
 from nalp.models.gan import GAN
 
 import utils.stream as s
+
+os.environ['TF_DETERMINISTIC_OPS'] = '1'
 
 
 def get_arguments():

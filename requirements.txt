@@ -1,2 +1,3 @@
 git+https://github.com/gugarosa/learnergy
 git+https://github.com/gugarosa/nalp
+tensorflow-determinism>=0.3.0

@@ -40,7 +40,7 @@ while [ $i -lt $N_RBMS ]; do
     python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 1
 
     # Reconstructing all pre-trained RBMs with linear combination of original and sampled weights
-    python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0.1
+    python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0.01
 
     # Incrementing the counter
     i=$(($i+1))
