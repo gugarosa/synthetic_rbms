@@ -54,6 +54,9 @@ def get_arguments():
     parser.add_argument(
         '-epochs', help='Number of training epochs', type=int, default=100)
 
+    parser.add_argument(
+        '-seed', help='Tensorflow seed', type=int, default=1)
+
     return parser.parse_args()
 
 
@@ -74,7 +77,12 @@ if __name__ == '__main__':
     d_lr = args.d_lr
     g_lr = args.g_lr
     epochs = args.epochs
-    
+    seed = args.seed
+    	
+    # Setting Tensorflow and Numpy random seeds
+    tf.random.set_seed(seed)
+    np.random.seed(seed)
+
     # Creating an empty array for holding input data
     x = np.zeros([1, 0])
 

@@ -39,6 +39,9 @@ def get_arguments():
     parser.add_argument(
         '-alpha', help='ReLU activation threshold', type=float, default=0.01)
 
+    parser.add_argument(
+        '-seed', help='Tensorflow seed', type=int, default=1)
+
     return parser.parse_args()
 
 
@@ -54,6 +57,10 @@ if __name__ == '__main__':
     noise_dim = args.noise
     n_samplings = args.sampling
     alpha = args.alpha
+    seed = args.seed
+
+    # Setting Tensorflow random seeds
+    tf.random.set_seed(seed)
 
     # Creating the GAN
     gan = GAN(input_shape=(n_features,), noise_dim=noise_dim,
@@ -63,7 +70,7 @@ if __name__ == '__main__':
     gan.load_weights(f'models/{input_model}').expect_partial()
 
     # Creating a noise tensor for further sampling
-    z = tf.random.normal([size, 1, 1, noise_dim], seed=1)
+    z = tf.random.normal([size, 1, 1, noise_dim])
 
     # Sampling from GAN
     sampled_z = gan.G(z)
