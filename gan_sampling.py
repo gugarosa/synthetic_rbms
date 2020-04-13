@@ -63,7 +63,7 @@ if __name__ == '__main__':
     gan.load_weights(f'models/{input_model}').expect_partial()
 
     # Creating a noise tensor for further sampling
-    z = tf.random.normal([size, 1, 1, noise_dim])
+    z = tf.random.normal([size, 1, 1, noise_dim], seed=1)
 
     # Sampling from GAN
     sampled_z = gan.G(z)
