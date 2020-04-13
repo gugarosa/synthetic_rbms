@@ -2,7 +2,7 @@
 i=0
 
 # Defining a constant for number of pre-trained RBMs, i.e., input samples for the GAN
-N_RBMS=16
+N_RBMS=128
 
 # Defining a constant to hold the dataset
 DATASET="mnist"
@@ -23,21 +23,24 @@ while [ $i -lt $N_RBMS ]; do
 done
 
 # Pre-training GAN with RBMs weights
-python gan_training.py ${N_RBMS} ${RBM_PATH} ${GAN_PATH} -batch_size 2 -noise 1000 -epochs 1000
+python gan_training.py ${N_RBMS} ${RBM_PATH} ${GAN_PATH} -batch_size 4 -noise 10000 -epochs 1000
 
 # Sampling new weights from pre-trained GAN
-python gan_sampling.py ${GAN_PATH} ${GAN_PATH} -noise 1000
+python gan_sampling.py ${GAN_PATH} ${GAN_PATH} -noise 10000
 
 # Restting the counter for iterating purposes
 i=0
 
 # Creating a loop of `N_RBMS`
 while [ $i -lt $N_RBMS ]; do
-    # Reconstructing all pre-trained RBMs with pre-trained weights
-    python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i}
+    # Reconstructing all pre-trained RBMs with original weights
+    python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0
 
     # Reconstructing all pre-trained RBMs with sampled weights
-    python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${GAN_PATH}
+    python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 1
+
+    # Reconstructing all pre-trained RBMs with linear combination of original and sampled weights
+    python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0.1
 
     # Incrementing the counter
     i=$(($i+1))

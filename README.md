@@ -67,7 +67,7 @@ Finally, with the new sampled weights, it is now possible to reconstruct the ori
 
 ```python rbm_reconstruction.py -h```
 
-*Note that this script will perform two reconstructions for each pre-trained RBM: original weights and sampled weights.*
+*Note that this script uses a parameter for reconstructing weights: 0 will use original weights, 1 will use sampled weights, and any value between 0 and 1 will use a linear combination between both.*
 
 ### (Optional) Weights Inspection
 
