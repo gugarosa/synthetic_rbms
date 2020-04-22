@@ -1,14 +1,3 @@
-# ?
-
-*This repository holds all the necessary code to run the very-same experiments described in the paper "?".*
-
-## References
-
-If you use our work to fulfill any of your needs, please cite us:
-
-```
-```
-
 ## Structure
 
   * `models/`: Folder for saving the output models, such as `.pth` and `tensorflow` ones;
