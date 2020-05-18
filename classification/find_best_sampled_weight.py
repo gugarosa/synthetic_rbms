@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # Instantiates an SVM
     clf = SVC(gamma='auto')
 
-    # Loads the validation data
+    # Loads the training and validation data
     train, val, _ = s.load_dataset(name=dataset)
 
     # Transforming datasets into tensors
