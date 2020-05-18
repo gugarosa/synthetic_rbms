@@ -107,3 +107,5 @@ if __name__ == '__main__':
 
     # Performs the final classification
     acc = clf.score(f_test.detach().numpy(), y_test.detach().numpy())
+
+    print(acc)
