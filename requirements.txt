@@ -1,0 +1,4 @@
+git+https://github.com/gugarosa/learnergy
+./libraries/nalp
+scikit-learn>=0.22.2
+tensorflow-determinism>=0.3.0

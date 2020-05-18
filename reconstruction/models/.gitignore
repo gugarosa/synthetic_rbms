@@ -1,0 +1,5 @@
+# Ignoring possible model files
+checkpoint
+*.data*
+*.index
+*.pth
