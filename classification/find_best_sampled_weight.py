@@ -139,7 +139,7 @@ if __name__ == '__main__':
         logger.info(sampled_acc)
 
         # Checking if current sampled accuracy was better than previous one
-        if sampled_acc < best_sampled_acc:
+        if sampled_acc > best_sampled_acc:
             # Saving best accuracy and best epoch values
             best_sampled_acc, best_epoch = sampled_acc, e
 

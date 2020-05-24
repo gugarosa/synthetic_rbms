@@ -26,17 +26,9 @@ def get_arguments():
     parser.add_argument(
         'input_model', help='Input name for the pre-trained RBM', type=str)
 
-    # Adds an identifier argument to the desired weights file
-    parser.add_argument(
-        'input_weight', help='Input name for the weight file', type=str)
-
     # Adds an identifier argument to the desired sampled weights file
     parser.add_argument(
         'input_sampled', help='Input name for the sampled weight file', type=str)
-
-    # Adds an identifier argument to the desired epoch number of the sampled weight
-    parser.add_argument(
-        'sampled_epoch', help='Epoch number for the sampled weight', type=int)
 
     # Adds an identifier argument to the desired  file
     parser.add_argument(
@@ -52,9 +44,7 @@ if __name__ == '__main__':
     # Gathering variables from arguments
     dataset = args.dataset
     input_model = args.input_model
-    input_weight = args.input_weight
     input_sampled = args.input_sampled
-    sampled_epoch = args.sampled_epoch
     alpha = args.alpha
 
     # Loads the testing data
@@ -64,24 +54,24 @@ if __name__ == '__main__':
     model = torch.load(f'models/{input_model}.pth')
 
     # Loading original and sampled weights
-    W = np.load(f'weights/{input_weight}.npy')
     W_sampled = np.load(f'weights/{input_sampled}.npy')
 
     # Reshaping weights to correct dimension
-    W = np.reshape(W, [model.n_visible, model.n_hidden])
     W_sampled = np.reshape(W_sampled, [W_sampled.shape[0], model.n_visible, model.n_hidden])
 
     # Resetting biases for fair comparison
     model.a = torch.nn.Parameter(torch.zeros(model.n_visible))
     model.b = torch.nn.Parameter(torch.zeros(model.n_hidden))
 
-    # Applying linear combination of original and sampled weights as new weights
-    model.W = torch.nn.Parameter((1 - alpha) * torch.from_numpy(W) + alpha * torch.from_numpy(W_sampled[sampled_epoch-1]))
+    # For every sampled weight
+    for i in range(W_sampled.shape[0]):
+        # Applying linear combination of original and sampled weights as new weights
+        model.W = torch.nn.Parameter((1 - alpha) * model.W + alpha * torch.from_numpy(W_sampled[i]).to(model.device))
 
-    # Checking model device type
-    if model.device == 'cuda':
-        # Applying its parameters as cuda again
-        model = model.cuda()
+        # Checking model device type
+        if model.device == 'cuda':
+            # Applying its parameters as cuda again
+            model = model.cuda()
 
-    # Reconstructs an RBM
-    mse, pl = model.reconstruct(test)
+        # Reconstructs an RBM
+        mse, pl = model.reconstruct(test)

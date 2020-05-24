@@ -42,7 +42,7 @@ def get_arguments():
         '-shuffle', help='Dataset shuffling', type=bool, default=False)
 
     parser.add_argument(
-        '-noise', help='Noise dimension', type=int, default=100)
+        '-noise', help='Noise dimension', type=int, default=10000)
 
     parser.add_argument(
         '-sampling', help='Number of samplings', type=int, default=3)
