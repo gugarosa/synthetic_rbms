@@ -5,6 +5,9 @@ import torch
 from sklearn.svm import SVC
 
 import utils.stream as s
+import learnergy.utils.logging as l
+
+logger = l.get_logger(__name__)
 
 
 def get_arguments():
@@ -84,6 +87,8 @@ if __name__ == '__main__':
     if model.device == 'cuda':
         # Applying its parameters as cuda again
         model = model.cuda()
+        x_train = x_train.cuda()
+        x_val = x_val.cuda()
 
     # Extract features from the original RBM
     f_train = model.forward(x_train)
@@ -93,13 +98,15 @@ if __name__ == '__main__':
     clf = SVC(gamma='auto')
 
     # Fits a classifier
-    clf.fit(f_train.detach().numpy(), y_train.detach().numpy())
+    clf.fit(f_train.detach().cpu().numpy(), y_train.detach().cpu().numpy())
 
     # Validates the classifier
-    original_acc = clf.score(f_val.detach().numpy(), y_val.detach().numpy())
+    original_acc = clf.score(f_val.detach().cpu().numpy(), y_val.detach().cpu().numpy())
 
-    # Defining best sampled accuracy as a low value
-    best_sampled_acc = 0
+    logger.info(original_acc)
+
+    # Defining best sampled accuracy and best epoch as zero
+    best_sampled_acc, best_epoch = 0, 0
 
     # Iterating over all possible epochs
     for e in range(W_sampled.shape[0]):
@@ -116,16 +123,20 @@ if __name__ == '__main__':
         if model.device == 'cuda':
             # Applying its parameters as cuda again
             model = model.cuda()
+            x_train = x_train.cuda()
+            x_val = x_val.cuda()
 
         # Extract features from the original RBM
         f_train = model.forward(x_train)
         f_val = model.forward(x_val)
 
         # Fits a classifier
-        clf.fit(f_train.detach().numpy(), y_train.detach().numpy())
+        clf.fit(f_train.detach().cpu().numpy(), y_train.detach().cpu().numpy())
 
         # Validates the classifier
-        sampled_acc = clf.score(f_val.detach().numpy(), y_val.detach().numpy())
+        sampled_acc = clf.score(f_val.detach().cpu().numpy(), y_val.detach().cpu().numpy())
+
+        logger.info(sampled_acc)
 
         # Checking if current sampled accuracy was better than previous one
         if sampled_acc < best_sampled_acc:
