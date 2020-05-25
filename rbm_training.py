@@ -87,7 +87,10 @@ if __name__ == '__main__':
     seed = args.seed
 
     # Loads the training data
-    train, _, _ = s.load_dataset(name=dataset, val_split=split, seed=seed)
+    train, _, _ = s.load_dataset(name=dataset, val_split=split)
+
+    # Defining the torch seed
+    torch.manual_seed(seed)
 
     # Creates an RBM
     model = RBM(n_visible=n_visible, n_hidden=n_hidden, steps=steps, learning_rate=lr,

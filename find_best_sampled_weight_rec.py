@@ -2,12 +2,8 @@ import argparse
 
 import numpy as np
 import torch
-from sklearn.svm import SVC
 
 import utils.stream as s
-import learnergy.utils.logging as l
-
-logger = l.get_logger(__name__)
 
 
 def get_arguments():
@@ -20,7 +16,7 @@ def get_arguments():
 
     # Creates the ArgumentParser
     parser = argparse.ArgumentParser(
-        usage='Finds the best sampled weight by classifying an RBM over a validation set with original and sampled weights.')
+        usage='Finds the best sampled weight by reconstructing an RBM over a validation set with original and sampled weights.')
 
     # Adds a dataset argument with pre-defined choices
     parser.add_argument('dataset', help='Dataset identifier', choices=[
@@ -38,9 +34,6 @@ def get_arguments():
     parser.add_argument(
         'input_sampled', help='Input name for the sampled weight file', type=str)
 
-    parser.add_argument(
-        '-seed', help='Seed identifier', type=int, default=0)
-
     return parser.parse_args()
 
 
@@ -53,21 +46,9 @@ if __name__ == '__main__':
     input_model = args.input_model
     input_weight = args.input_weight
     input_sampled = args.input_sampled
-    seed = args.seed
 
-    # Instantiates an SVM
-    clf = SVC(gamma='auto')
-
-    # Loads the training and validation data
-    train, val, _ = s.load_dataset(name=dataset, seed=seed)
-
-    # Transforming datasets into tensors
-    x_train, y_train = s.dataset_as_tensor(train)
-    x_val, y_val = s.dataset_as_tensor(val)
-
-    # Reshaping tensors
-    x_train = x_train.view(len(train), 784)
-    x_val = x_val.view(len(val), 784)
+    # Loads the validation data
+    _, val, _ = s.load_dataset(name=dataset)
 
     # Loads the pre-trained model
     model = torch.load(f'models/{input_model}.pth')
@@ -91,26 +72,12 @@ if __name__ == '__main__':
     if model.device == 'cuda':
         # Applying its parameters as cuda again
         model = model.cuda()
-        x_train = x_train.cuda()
-        x_val = x_val.cuda()
 
-    # Extract features from the original RBM
-    f_train = model.forward(x_train)
-    f_val = model.forward(x_val)
+    # Reconstructs the original RBM
+    original_mse, _ = model.reconstruct(val)
 
-    # Instantiates an SVM
-    clf = SVC(gamma='auto')
-
-    # Fits a classifier
-    clf.fit(f_train.detach().cpu().numpy(), y_train.detach().cpu().numpy())
-
-    # Validates the classifier
-    original_acc = clf.score(f_val.detach().cpu().numpy(), y_val.detach().cpu().numpy())
-
-    logger.info(original_acc)
-
-    # Defining best sampled accuracy and best epoch as zero
-    best_sampled_acc, best_epoch = 0, 0
+    # Defining best sampled MSE as a high value
+    best_sampled_mse = 9999999
 
     # Iterating over all possible epochs
     for e in range(W_sampled.shape[0]):
@@ -127,25 +94,14 @@ if __name__ == '__main__':
         if model.device == 'cuda':
             # Applying its parameters as cuda again
             model = model.cuda()
-            x_train = x_train.cuda()
-            x_val = x_val.cuda()
 
-        # Extract features from the original RBM
-        f_train = model.forward(x_train)
-        f_val = model.forward(x_val)
+        # Reconstructs an RBM
+        sampled_mse, _ = model.reconstruct(val)
 
-        # Fits a classifier
-        clf.fit(f_train.detach().cpu().numpy(), y_train.detach().cpu().numpy())
-
-        # Validates the classifier
-        sampled_acc = clf.score(f_val.detach().cpu().numpy(), y_val.detach().cpu().numpy())
-
-        logger.info(sampled_acc)
-
-        # Checking if current sampled accuracy was better than previous one
-        if sampled_acc > best_sampled_acc:
-            # Saving best accuracy and best epoch values
-            best_sampled_acc, best_epoch = sampled_acc, e
+        # Checking if current sampled MSE was better than previous one
+        if sampled_mse < best_sampled_mse:
+            # Saving best MSE and best epoch values
+            best_sampled_mse, best_epoch = sampled_mse, e
 
     print(f'Validation finished and best RBM found.')
-    print(f'Original Accuracy: {original_acc} | Best Sampled Accuracy: {best_sampled_acc} | Epoch: {best_epoch+1}')
+    print(f'Original MSE: {original_mse} | Best Sampled MSE: {best_sampled_mse} | Epoch: {best_epoch+1}')

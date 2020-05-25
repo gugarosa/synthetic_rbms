@@ -11,13 +11,12 @@ DATASETS = {
 }
 
 
-def load_dataset(name='mnist', val_split=0.2, seed=0):
+def load_dataset(name='mnist', val_split=0.2):
     """Loads an input dataset.
 
     Args:
         name (str): Name of dataset to be loaded.
         val_split (float): Percentage of split for the validation set.
-        seed (int): Seed for splitting the training and validation data.
 
     Returns:
         Training, validation and testing sets of loaded dataset.
@@ -25,7 +24,7 @@ def load_dataset(name='mnist', val_split=0.2, seed=0):
     """
 
     # Defining the torch seed
-    torch.manual_seed(seed)
+    torch.manual_seed(0)
 
     # Loads the training data
     train = DATASETS[name](root='./data', train=True, download=True,
@@ -40,6 +39,27 @@ def load_dataset(name='mnist', val_split=0.2, seed=0):
                           transform=tv.transforms.ToTensor())
 
     return train, val, test
+
+
+def dataset_as_tensor(dataset):
+    """Transforms a PyTorch dataset into tensors.
+
+    Args:
+        dataset (Dataset): PyTorch dataset.
+
+    Returns:
+        Data and labels into a tensor formatting.
+
+    """
+
+    # Creates batches using PyTorch's DataLoader
+    batches = torch.utils.data.DataLoader(
+        dataset, batch_size=len(dataset), shuffle=False, num_workers=1)
+
+    # Iterates through the single batch
+    for batch in batches:
+        # Returns data and labels
+        return batch[0], batch[1]
 
 
 def save_torch_as_numpy(t, output_file=''):

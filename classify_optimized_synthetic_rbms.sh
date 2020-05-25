@@ -2,7 +2,7 @@
 i=0
 
 # Defining a constant for number of pre-trained RBMs, i.e., input samples for the GAN
-N_RBMS=64
+N_RBMS=32
 
 # Defining a constant to hold the dataset
 DATASET="mnist"

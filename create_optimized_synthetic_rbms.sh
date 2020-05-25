@@ -30,8 +30,9 @@ i=0
 
 # Creating a loop of `N_RBMS`
 while [ $i -lt $N_RBMS ]; do
-    # Finding the best sampled weight by classifying an RBM over a validation set with original and sampled weights
-    python find_best_sampled_weight.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH} -seed ${i}
+    # Finding the best sampled weight by reconstructing an RBM over a validation set with original and sampled weights
+    python find_best_sampled_weight_rec.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH}
+    # python find_best_sampled_weight_clf.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} ${GAN_PATH}
 
     # Incrementing the counter
     i=$(($i+1))
