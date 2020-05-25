@@ -33,7 +33,7 @@ def get_arguments():
         'output_model', help='Output name for saved model', type=str)
 
     parser.add_argument(
-        '-batch_size', help='Batch size', type=int, default=4)
+        '-batch_size', help='Batch size', type=int, default=2)
 
     parser.add_argument(
         '-norm', help='Dataset normalization', type=bool, default=False)
@@ -57,10 +57,10 @@ def get_arguments():
         '-g_lr', help='Generator learning rate', type=float, default=0.0001)
 
     parser.add_argument(
-        '-epochs', help='Number of training epochs', type=int, default=100)
+        '-epochs', help='Number of training epochs', type=int, default=4000)
 
     parser.add_argument(
-        '-seed', help='Tensorflow seed', type=int, default=1)
+        '-seed', help='Tensorflow seed', type=int, default=0)
 
     return parser.parse_args()
 

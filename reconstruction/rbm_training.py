@@ -57,7 +57,10 @@ def get_arguments():
         '-batch_size', help='Batch size', type=int, default=128)
 
     parser.add_argument(
-        '-epochs', help='Number of training epochs', type=int, default=5)
+        '-epochs', help='Number of training epochs', type=int, default=10)
+
+    parser.add_argument(
+        '-seed', help='Seed identifier', type=int, default=0)
 
     return parser.parse_args()
 
@@ -81,13 +84,14 @@ if __name__ == '__main__':
     gpu = args.gpu
     batch_size = args.batch_size
     epochs = args.epochs
+    seed = args.seed
 
     # Loads the training data
-    train, _, _ = s.load_dataset(name=dataset, val_split=split)
+    train, _, _ = s.load_dataset(name=dataset, val_split=split, seed=seed)
 
     # Creates an RBM
     model = RBM(n_visible=n_visible, n_hidden=n_hidden, steps=steps, learning_rate=lr,
-                momentum=momentum, decay=decay, temperature=T, use_gpu=gpu)
+                momentum=momentum, decay=decay, temperature=T, use_gpu=True)
 
     # Fits an RBM
     mse, pl = model.fit(train, batch_size=batch_size, epochs=epochs)

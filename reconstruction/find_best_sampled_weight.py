@@ -34,6 +34,9 @@ def get_arguments():
     parser.add_argument(
         'input_sampled', help='Input name for the sampled weight file', type=str)
 
+    parser.add_argument(
+        '-seed', help='Seed identifier', type=int, default=0)
+
     return parser.parse_args()
 
 
@@ -46,9 +49,10 @@ if __name__ == '__main__':
     input_model = args.input_model
     input_weight = args.input_weight
     input_sampled = args.input_sampled
+    seed = args.seed
 
     # Loads the validation data
-    _, val, _ = s.load_dataset(name=dataset)
+    _, val, _ = s.load_dataset(name=dataset, seed=seed)
 
     # Loads the pre-trained model
     model = torch.load(f'models/{input_model}.pth')

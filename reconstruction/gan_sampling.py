@@ -48,7 +48,7 @@ def get_arguments():
         '-g_lr', help='Generator learning rate', type=float, default=0.0001)
 
     parser.add_argument(
-        '-seed', help='Tensorflow seed', type=int, default=1)
+        '-seed', help='Tensorflow seed', type=int, default=0)
 
     return parser.parse_args()
 

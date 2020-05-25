@@ -54,24 +54,32 @@ if __name__ == '__main__':
     model = torch.load(f'models/{input_model}.pth')
 
     # Loading original and sampled weights
-    W_sampled = np.load(f'weights/{input_sampled}.npy')
+    # W_sampled = np.load(f'weights/{input_sampled}.npy')
 
     # Reshaping weights to correct dimension
-    W_sampled = np.reshape(W_sampled, [W_sampled.shape[0], model.n_visible, model.n_hidden])
+    # W_sampled = np.reshape(W_sampled, [W_sampled.shape[0], model.n_visible, model.n_hidden])
 
     # Resetting biases for fair comparison
     model.a = torch.nn.Parameter(torch.zeros(model.n_visible))
     model.b = torch.nn.Parameter(torch.zeros(model.n_hidden))
 
-    # For every sampled weight
-    for i in range(W_sampled.shape[0]):
-        # Applying linear combination of original and sampled weights as new weights
-        model.W = torch.nn.Parameter((1 - alpha) * model.W + alpha * torch.from_numpy(W_sampled[i]).to(model.device))
+    # Checking model device type
+    if model.device == 'cuda':
+        # Applying its parameters as cuda again
+        model = model.cuda()
 
-        # Checking model device type
-        if model.device == 'cuda':
-            # Applying its parameters as cuda again
-            model = model.cuda()
+    # Reconstructs an RBM
+    mse, pl = model.reconstruct(test)
 
-        # Reconstructs an RBM
-        mse, pl = model.reconstruct(test)
+    # # For every sampled weight
+    # for i in range(W_sampled.shape[0]):
+    #     # Applying linear combination of original and sampled weights as new weights
+    #     model.W = torch.nn.Parameter((1 - alpha) * model.W + alpha * torch.from_numpy(W_sampled[i]).to(model.device))
+
+    #     # Checking model device type
+    #     if model.device == 'cuda':
+    #         # Applying its parameters as cuda again
+    #         model = model.cuda()
+
+    #     # Reconstructs an RBM
+    #     mse, pl = model.reconstruct(test)

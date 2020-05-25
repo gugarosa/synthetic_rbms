@@ -2,7 +2,7 @@
 i=0
 
 # Defining a constant for number of pre-trained RBMs, i.e., input samples for the GAN
-N_RBMS=64
+N_RBMS=32
 
 # Defining a constant to hold the dataset
 DATASET="mnist"
@@ -16,14 +16,14 @@ GAN_PATH="vanilla_gan"
 # Creating a loop of `N_RBMS`
 while [ $i -lt $N_RBMS ]; do
     # Pre-training amount of desired RBMs
-    python rbm_training.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} -epochs 5
+    python rbm_training.py ${DATASET} ${RBM_PATH}_${i} ${RBM_PATH}_${i} -seed ${i}
 
     # Incrementing the counter
     i=$(($i+1))
 done
 
 # Pre-training GAN with RBMs weights
-python gan_training_and_sampling.py ${N_RBMS} ${RBM_PATH} ${GAN_PATH} -batch_size 2 -noise 10000 -epochs 2000
+python gan_training_and_sampling.py ${N_RBMS} ${RBM_PATH} ${GAN_PATH} -batch_size 2
 
 # Resetting the counter for iterating purposes
 i=0
