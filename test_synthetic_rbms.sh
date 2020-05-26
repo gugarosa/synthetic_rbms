@@ -15,14 +15,18 @@ GAN_PATH="vanilla_gan"
 
 # Creating a loop of `N_RBMS`
 while [ $i -lt $N_RBMS ]; do
-    # Reconstructing the test set with all pre-trained RBMs and original weights
+    # Reconstructing / classifying the test set with all pre-trained RBMs and original weights
     python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0
+    # python rbm_classification.py ${DATASET} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0
 
-    # Reconstructing the test set with all pre-trained RBMs and sampled weights
+    # Reconstructing / classifying the test set with all pre-trained RBMs and sampled weights
     python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 1
+    # python rbm_classification.py ${DATASET} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 1
 
-    # Reconstructing the test set with all pre-trained RBMs using a linear combination of original and sampled weights
+    # Reconstructing / classifying the test set with all pre-trained RBMs using a linear combination
+    # of original and sampled weights
     python rbm_reconstruction.py ${DATASET} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0.9
+    # python rbm_classification.py ${DATASET} ${RBM_PATH}_${i} ${GAN_PATH} -alpha 0.9
 
     # Incrementing the counter
     i=$(($i+1))
