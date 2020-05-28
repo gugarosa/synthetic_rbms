@@ -26,7 +26,7 @@ There are 4 simple steps in order to accomplish the same experiments described i
  * Pre-train GANs with RBMs-saved weights as the input data and validate its performance;
  * Perform the final evaluation comparison original and sampled weights in the testing set;
 
-*Pre-trained models are also available at: http://recogna.tech/files*.
+*Pre-trained models are also available at: http://recogna.tech/files/synthetic_rbms*.
  
 ### Installation
 
