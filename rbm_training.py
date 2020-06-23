@@ -1,7 +1,7 @@
 import argparse
 
 import torch
-from learnergy.models.rbm import RBM
+from learnergy.models.binary import RBM
 
 import utils.stream as s
 
