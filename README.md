@@ -2,12 +2,16 @@
 
 *This repository holds all the necessary code to run the very-same experiments described in the paper "Adversarially Generated Restricted Boltzmann Machines".*
 
+---
+
 ## References
 
 If you use our work to fulfill any of your needs, please cite us:
 
 ```
 ```
+
+---
 
 ## Structure
 
@@ -16,6 +20,8 @@ If you use our work to fulfill any of your needs, please cite us:
   * `utils/`
     * `stream.py`: Common loading and saving methods;
   * `weights/`: Folder for saving the output weights, which will use `.npy` extensions.
+
+---
 
 ## How-to-Use
 
@@ -65,3 +71,5 @@ With a pre-trained and sampled weights from the GAN in hands, it is now possible
 After finding the best GAN's sampled weight, it is now possible to perform a final reconstruction / classification over the testing set. To accomplish such a procedure, please use:
 
 ```python rbm_reconstruction.py -h``` or ```python rbm_classification.py -h```
+
+---
