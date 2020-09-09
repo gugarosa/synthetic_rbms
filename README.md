@@ -1,6 +1,6 @@
-# Adversarially Generated Restricted Boltzmann Machines
+# Adversarially-Generated Restricted Boltzmann Machines
 
-*This repository holds all the necessary code to run the very-same experiments described in the paper "Adversarially Generated Restricted Boltzmann Machines".*
+*This repository holds all the necessary code to run the very-same experiments described in the paper "Adversarially-Generated Restricted Boltzmann Machines".*
 
 ---
 
@@ -15,7 +15,7 @@ If you use our work to fulfill any of your needs, please cite us:
 
 ## Structure
 
-  * `libraries/`: Folder containing a customized version of the NALP library in regard to this experiment;
+  * `libraries/`: Folder containing a customized version of the NALP library regarding this experiment;
   * `models/`: Folder for saving the output models, such as `.pth` and `tensorflow` ones;
   * `utils/`
     * `stream.py`: Common loading and saving methods;
@@ -23,53 +23,100 @@ If you use our work to fulfill any of your needs, please cite us:
 
 ---
 
-## How-to-Use
+## Package Guidelines
 
-There are 4 simple steps in order to accomplish the same experiments described in the paper:
-
- * Install the requirements;
- * Pre-train RBMs and save their weights;
- * Pre-train GANs with RBMs-saved weights as the input data and validate its performance;
- * Perform the final evaluation comparison original and sampled weights in the testing set;
-
-*Pre-trained models are also available at: http://recogna.tech/files/synthetic_rbms*.
- 
 ### Installation
 
-Please install all the pre-needed requirements using:
+Install all the pre-needed requirements using:
 
-```pip install -r requirements.txt```
+```Python
+pip install -r requirements.txt
+```
+
+### Downloading Pre-Trained Models
+
+One can [download](http://recogna.tech/files/synthetic_rbms) the pre-trained models instead of training them from scratch.
+
+---
+
+## Usage
 
 ### RBMs Pre-Training
 
 Our first script helps you in pre-training an RBM and saving its weights. With that in mind, just run the following script with the input arguments:
 
-```python rbm_training.py -h```
+```Python
+python rbm_training.py -h
+```
 
 *Note that it will output a helper file in order to assist in choosing the correct arguments for the script.*
 
 ### GANs Pre-Training and Sampling
 
-After pre-training RBMs and saving their weights, we can now proceed in training a GAN with the saved weights as its input. Just run the following script and invoke its helper:
+After pre-training RBMs and saving their weights, we can now train a GAN with the saved weights as its input. Just run the following script and invoke its helper:
 
-```python gan_training_and_sampling.py -h```
+```Python
+python gan_training_and_sampling.py -h
+```
 
 If you wish to sample any additional weights, please use:
 
-```python gan_sampling.py -h```
+```Python
+python gan_sampling.py -h
+```
 
 ### Finding GAN's Best Sampled Weight Guided by RBM Reconstruction or Classification
 
-With a pre-trained and sampled weights from the GAN in hands, it is now possible to reconstruct / classify these weights over a validation set and compare at what epoch the GAN could outperform the original RBM. Therefore, run the following script in order to fulfill that purpose:
+With a pre-trained and sampled weights from the GAN in hands, it is now possible to reconstruct/classify these weights over a validation set and compare at what epoch the GAN could outperform the original RBM. Therefore, run the following script in order to fulfill that purpose:
 
-```python find_best_sampled_weight_rec.py -h``` or ```python find_best_sampled_weight_clf.py -h```
+```Python
+python find_best_sampled_weight_rec.py -h
+```
 
-*Note that the saved models uses `.pth` or `tensorflow` extensions, while saved weights will use a `*.npy` file.*
+or
+
+```Python
+python find_best_sampled_weight_clf.py -h
+```
+
+*Note that the saved models use `.pth` or `tensorflow` extensions, while saved weights will use a `*.npy` file.*
 
 ### Final Evaluation
 
-After finding the best GAN's sampled weight, it is now possible to perform a final reconstruction / classification over the testing set. To accomplish such a procedure, please use:
+After finding the best GAN's sampled weight, it is now possible to perform a final reconstruction/classification over the testing set. To accomplish such a procedure, please use:
 
-```python rbm_reconstruction.py -h``` or ```python rbm_classification.py -h```
+```Python
+python rbm_reconstruction.py -h
+```
+
+or
+
+```Python
+python rbm_classification.py -h
+```
+
+### Bash Script
+
+Instead of invoking every script to conduct the experiments, it is also possible to use the provided shell scripts, as follows:
+
+```Bash
+./train_synthetic_rbms.sh
+```
+
+```Bash
+./validate_synthetic_rbms.sh
+```
+
+```Bash
+./test_synthetic_rbms.sh
+```
+
+Such a script will conduct every step needed to accomplish the experimentation used throughout this paper. Furthermore, one can change any input argument that is defined in the script.
+
+---
+
+## Support
+
+We know that we do our best, but it is inevitable to acknowledge that we make mistakes. If you ever need to report a bug, report a problem, talk to us, please do so! We will be available at our bests at this repository or gustavo.rosa@unesp.br.
 
 ---
