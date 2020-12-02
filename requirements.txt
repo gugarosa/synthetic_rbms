@@ -1,4 +1,4 @@
 ./libraries/nalp
-learnergy>=1.0.7
+learnergy>=1.1.0
 scikit-learn>=0.22.2
 tensorflow-determinism>=0.3.0
