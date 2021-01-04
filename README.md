@@ -1,6 +1,6 @@
-# Adversarially-Generated Restricted Boltzmann Machines
+# Fast Ensemble Learning Using Adversarially-Generated Restricted Boltzmann Machines
 
-*This repository holds all the necessary code to run the very-same experiments described in the paper "Adversarially-Generated Restricted Boltzmann Machines".*
+*This repository holds all the necessary code to run the very-same experiments described in the paper "Fast Ensemble Learning Using Adversarially-Generated Restricted Boltzmann Machines".*
 
 ---
 
