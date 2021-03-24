@@ -41,10 +41,6 @@ Install all the pre-needed requirements using:
 pip install -r requirements.txt
 ```
 
-### Downloading Pre-Trained Models
-
-One can [download](http://recogna.tech/files/synthetic_rbms) the pre-trained models instead of training them from scratch.
-
 ---
 
 ## Usage
