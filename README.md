@@ -8,7 +8,7 @@
 
 If you use our work to fulfill any of your needs, please cite us:
 
-```
+```BibTex
 @misc{rosa2021fast,
       title={Fast Ensemble Learning Using Adversarially-Generated Restricted Boltzmann Machines}, 
       author={Gustavo H. de Rosa and Mateus Roder and João P. Papa},
